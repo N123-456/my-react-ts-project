@@ -1,35 +1,41 @@
-import React,{useState} from "react";
-
+import { Center, PasswordInput, TextInput } from "@mantine/core";
+import React, { useState } from "react";
+import { Button } from '@mantine/core';
 interface loginCredentials {
-
-  email:string;
+  email: string;
   password: string;
 }
-const login = () => {
-  const [credentials, setCredentials] = useState<loginCredentials>({
-    email: "",
-    password: "",
-  });
-const handleChange = (e: { target: { value: any; name: any } }) => {
-  const { value, name } = e.target;
+const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  return (
+    <div className="flex align-center justify-center">
+      <div className="flex flex-col w-[100%]">
+        <Center className="flex flex-col">
+          <div className="w-[25%] py-4 text-xl focus:border-black-200 ">
+            <TextInput
+              label="Email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
+          <div className="w-[25%] py-4 text-xl focus:border-black-200">
+            <PasswordInput
+              label="Password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </div>
+          <div className="w-20 ">
+          <Button variant="filled">Button</Button>;
+          </div>
+        </Center>
+      </div>
+    </div>
+  );
 };
-const handleSubmit = (e: { preventDefault: () => void }) => {
-  e.preventDefault();
-  setCredentials({
-    email: "",
-    password: "",
-  });
-  return <div>
-      <div>
-        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-<input type="email" id="inputPassword5" name="email" value={credentials.email} />
 
-        </div>
-        <div>
-        <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-<input type="password" id="inputPassword5" name="password" value={credentials.password} />
-  </div>;
-  </div>
-}}
-
-export default login;
+export default LoginPage;
