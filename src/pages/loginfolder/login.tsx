@@ -3,12 +3,13 @@ import React, { useContext, useState } from "react";
 import { Button } from "@mantine/core";
 import myContext from "../../contextApi/dataContext";
 import { usersData } from "../userData/Userdata";
-
+import { useNavigate } from "react-router-dom";
 interface loginCredentials {
   email: string;
   password: string;
 }
 const LoginPage = () => {
+  const navigate = useNavigate();
   const { storeData } = useContext(myContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +22,7 @@ const LoginPage = () => {
     if (user) {
       alert("user exist");
       storeData({ email, password });
+      navigate("/dash");
     } else {
       alert("user does not exist");
     }
