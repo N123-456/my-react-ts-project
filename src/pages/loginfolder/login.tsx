@@ -1,14 +1,30 @@
 import { Center, PasswordInput, TextInput } from "@mantine/core";
-import React, { useState } from "react";
-import { Button } from '@mantine/core';
+import React, { useContext, useState } from "react";
+import { Button } from "@mantine/core";
+import myContext from "../../contextApi/dataContext";
+import { usersData } from "../userData/Userdata";
+
 interface loginCredentials {
   email: string;
   password: string;
 }
 const LoginPage = () => {
+  const { storeData } = useContext(myContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleSubmit = () => {
+    const user = usersData?.find(
+      (e: { email: string; password: string }) =>
+        e.email === email && e.password === password
+    );
 
+    if (user) {
+      alert("user exist");
+      storeData({ email, password });
+    } else {
+      alert("user does not exist");
+    }
+  };
   return (
     <div className="flex align-center justify-center">
       <div className="flex flex-col w-[100%]">
@@ -29,8 +45,18 @@ const LoginPage = () => {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div className="w-20 ">
-          <Button variant="filled">Button</Button>;
+          <div className="mb-3">
+            <p>Forgot Password?</p>
+          </div>
+          <div className="w-20 mb-2">
+            <Button
+              onClick={handleSubmit}
+              variant="filled"
+              size="lg"
+              radius="md"
+            >
+              Login
+            </Button>
           </div>
         </Center>
       </div>

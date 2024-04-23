@@ -1,6 +1,8 @@
-import { TextInput } from "@mantine/core";
-import React, { useState } from "react";
-
+import { Center, PasswordInput, TextInput } from "@mantine/core";
+import React, { useState, useContext } from "react";
+import { Button } from "@mantine/core";
+import myContext from "../../contextApi/dataContext";
+import { usersData } from "../userData/Userdata";
 interface signUpCredentials {
   name: string;
   email: string;
@@ -8,70 +10,63 @@ interface signUpCredentials {
 }
 
 const SignupPage = () => {
-  const [credentials, setCredentials] = useState<signUpCredentials>({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const handleChange = (e: { target: { value: any; name: any } }) => {
-    const { value, name } = e.target;
+  const handlSubmit = () => {
+    const findUser = usersData.find((user) => user.email === email);
+
+    if (findUser) {
+      console.log("user already exist");
+    } else {
+      storeData({ name, email, password });
+    }
   };
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setCredentials({
-      name: "",
-      email: "",
-      password: "",
-    });
-  };
+  const { info, storeData } = useContext(myContext);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
-    <div>
-      <div className="flex px-10 text text-3xl py-5 mb-3">
-        <h1>Sign-Up</h1>
+    <div className="flex align-center justify-center">
+      <div className="flex flex-col w-[100%]">
+        <Center className="flex flex-col">
+          <div className="w-[25%] py-4 text-xl focus:border-black-200 ">
+            <TextInput
+              label="Name"
+              placeholder="Enter your Name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </div>
+          <div className="w-[25%] py-4 text-xl focus:border-black-200 ">
+            <TextInput
+              label="Email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
+          <div className="w-[25%] py-4 text-xl focus:border-black-200">
+            <PasswordInput
+              label="Password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </div>
+          <div className="mb-4 py-4">
+            <p>Create an Account</p>
+          </div>
+          <div className="w-[25%]">
+            <Button
+              onClick={handlSubmit}
+              variant="filled"
+              size="lg"
+              radius="md"
+            >
+              Register
+            </Button>
+          </div>
+        </Center>
       </div>
-
-      <form onSubmit={handleSubmit} className="max-w-70  mx-auto">
-        <div className="mb-4">
-          <TextInput
-            label="Input label"
-            description="Input description"
-            placeholder="Input placeholder"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-black px-10 text-sm  mb-2 text-2xl">
-            Email
-          </label>
-          <input
-            className="border rounded w-56 py-2 px-4 text-gray-700"
-            type="email"
-            name="email"
-            value={credentials.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-black px-10 mb-2 text-2xl">
-            Password
-          </label>
-          <input
-            className="shadow border rounded w-56 py-2 px-3 text-gray-700"
-            type="password"
-            id="inputPassword5"
-            name="password"
-            value={credentials.password}
-          />
-        </div>
-        <div className="mb-4">
-          <button className="bg-pink-400 hover:bg-pink-100 text-white font-bold py-2 px-11 rounded ">
-            Create Account
-          </button>
-        </div>
-        <div className="mb-4">
-          <p className=" text-inherit py-2 px-13 ">Forgot Password?</p>
-        </div>
-      </form>
     </div>
   );
 };

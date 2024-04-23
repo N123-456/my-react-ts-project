@@ -12,8 +12,14 @@ import {
 import Signup from "./pages/Signupfolder/Signup";
 import login from "./pages/loginfolder/login";
 import Routes from "./routes/router";
+
+import DataState from "./contextApi/dataState";
 function App() {
-  return <Routes />;
+  return (
+    <DataState>
+      <Routes />
+    </DataState>
+  );
 }
 
 export default App;
