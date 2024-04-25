@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import { Button } from "@mantine/core";
 import myContext from "../../contextApi/dataContext";
 import { usersData } from "../userData/Userdata";
+import { useNavigate } from "react-router-dom";
 interface signUpCredentials {
   name: string;
   email: string;
@@ -10,6 +11,7 @@ interface signUpCredentials {
 }
 
 const SignupPage = () => {
+  const navigate=useNavigate();
   const handlSubmit = () => {
     const findUser = usersData.find((user) => user.email === email);
 
@@ -57,9 +59,9 @@ const SignupPage = () => {
           </div>
           <div className="w-[25%]">
             <Button
-              onClick={handlSubmit}
+              onClick={() => navigate("/")} 
               variant="filled"
-              size="lg"
+              size="md"
               radius="md"
             >
               Register

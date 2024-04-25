@@ -22,7 +22,7 @@ const LoginPage = () => {
     if (user) {
       alert("user exist");
       storeData({ email, password });
-      navigate("/dash");
+      navigate("/navbar");
     } else {
       alert("user does not exist");
     }

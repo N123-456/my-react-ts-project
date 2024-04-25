@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Product = () => {
+const SSHkeys = () => {
   return (
     <div>
-     Product 
+      SSH Keys
     </div>
   );
 }
 
-export default Product;
+export default SSHkeys;

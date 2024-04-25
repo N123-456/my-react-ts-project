@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
-import auth from "../auth-service";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import myContext from "../contextApi/dataContext";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }) => {}
+ { const navigate = useNavigate();
   const user = useContext(myContext);
-  if (!user.isAuthenticated) {
-    return Navigate("/dash");
+  if (user) {
+    navigate("/navbar");
+    
   }
   return children;
 };

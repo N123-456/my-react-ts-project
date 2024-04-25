@@ -13,11 +13,13 @@ import Signup from "./pages/Signupfolder/Signup";
 import login from "./pages/loginfolder/login";
 import Routes from "./routes/router";
 import DataState from "./contextApi/dataState";
+import Navbar from "./pages/Navbar/NavbarSegmented";
 function App() {
   return (
     <DataState>
       <Routes />
     </DataState>
+      
   );
 }
 
