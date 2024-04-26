@@ -20,9 +20,9 @@ const LoginPage = () => {
     );
 
     if (user) {
-      alert("user exist");
+      
       storeData({ email, password });
-      navigate("/navbar");
+      navigate("/notification");
     } else {
       alert("user does not exist");
     }

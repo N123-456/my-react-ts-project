@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import myContext from "./dataContext";
 const DataState = (props) => {
-  const [info, setInfo] = useState({});
-  
+  const [info, setInfo] = useState(null);
+
   const storeData = (data) => setInfo({ ...info, data });
 
   return (

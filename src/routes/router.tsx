@@ -10,6 +10,7 @@ import Databases from "../pages/Databases/Databases";
 import Authentication from "../pages/Authentication/Authentication";
 import ProtectedRoute from "./ProtectedRoute";
 import { BasicAppShell } from "../pages/AppShell/applayout";
+import PublicRoute from "./PublicRoute";
 const Routes = () => {
   const router = createBrowserRouter([
     {
@@ -17,18 +18,35 @@ const Routes = () => {
       element: <SignupPage />,
     },
     {
+      
       path: "/",
-      element: <LoginPage />,
+      element:(<PublicRoute><LoginPage />
+          </PublicRoute>)
+      
     },
     {
       path: "/notification",
-      element: <BasicAppShell />,
-      children: [{ index: true, element: <Notification /> }],
-    },
+      element: <BasicAppShell/>,
+      children: [
+        {
+          index: true,
+          element: (
+            <ProtectedRoute>
+              <Notification/>
+            </ProtectedRoute>)
+        }],
+      
+      },
     {
       path: "/billing",
       element: <BasicAppShell />,
-      children: [{ index: true, element: <Billing /> }],
+
+      children: [
+        {
+          index: true,
+          element: <Billing />,
+        },
+      ],
     },
   ]);
   return <RouterProvider router={router} />;

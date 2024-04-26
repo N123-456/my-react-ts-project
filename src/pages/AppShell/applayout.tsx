@@ -2,6 +2,7 @@ import { AppShell, Burger, Group, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Navbar from "../Navbar/NavbarSegmented";
 import { Outlet } from "react-router-dom";
+import ProtectedRoute from "../../routes/ProtectedRoute";
 
 export function BasicAppShell() {
   const [opened, { toggle }] = useDisclosure();
@@ -18,7 +19,9 @@ export function BasicAppShell() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
+        <ProtectedRoute>
         <Navbar />
+        </ProtectedRoute>
       </AppShell.Navbar>
       <AppShell.Main>
         <Outlet />
