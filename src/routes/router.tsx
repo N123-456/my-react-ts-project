@@ -18,25 +18,27 @@ const Routes = () => {
       element: <SignupPage />,
     },
     {
-      
       path: "/",
-      element:(<PublicRoute><LoginPage />
-          </PublicRoute>)
-      
+      element: (
+        <PublicRoute>
+          <LoginPage />
+        </PublicRoute>
+      ),
     },
     {
       path: "/notification",
-      element: <BasicAppShell/>,
+      element: <BasicAppShell />,
       children: [
         {
           index: true,
           element: (
             <ProtectedRoute>
-              <Notification/>
-            </ProtectedRoute>)
-        }],
-      
-      },
+              <Notification />
+            </ProtectedRoute>
+          ),
+        },
+      ],
+    },
     {
       path: "/billing",
       element: <BasicAppShell />,

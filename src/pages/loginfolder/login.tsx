@@ -20,7 +20,6 @@ const LoginPage = () => {
     );
 
     if (user) {
-      
       storeData({ email, password });
       navigate("/notification");
     } else {

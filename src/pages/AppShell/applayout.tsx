@@ -19,9 +19,7 @@ export function BasicAppShell() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        <ProtectedRoute>
         <Navbar />
-        </ProtectedRoute>
       </AppShell.Navbar>
       <AppShell.Main>
         <Outlet />

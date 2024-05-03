@@ -4,10 +4,8 @@ import myContext from "../contextApi/dataContext";
 
 const ProtectedRoute = ({ children }: any) => {
   const user = useContext(myContext).info;
-  console.log("user:",user)
-  if (user) {
+  if (!user) {
     return <Navigate to="/" />;
-    
   } else {
     return children;
   }

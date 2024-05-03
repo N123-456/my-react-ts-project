@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import myContext from "../contextApi/dataContext";
 
 const PublicRoute = ({ children }: any) => {

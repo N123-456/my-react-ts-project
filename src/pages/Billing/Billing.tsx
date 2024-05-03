@@ -1,5 +1,5 @@
-import * as React from "react";
 import ReactDOM from "react-dom/client";
+import { useMemo, useEffect, useState, useReducer } from "react";
 import {
   RowModel,
   Table,
@@ -18,144 +18,163 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-type Person = {
-  firstName: string;
-  lastName: string;
-  age: number;
-  visits: number;
-  status: string;
-  progress: number;
+type People = {
+  id: number;
+  name: string;
+  username: number;
+  email: number;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+    geo: {
+      lat: string;
+      lng: string;
+    };
+  };
+  phone: string;
+  website: string;
+  company: {
+    name: string;
+    catchPhrase: string;
+    bs: string;
+  };
 };
+const columnHelper = createColumnHelper<People>();
 
-const defaultData: Person[] = [
-  {
-    firstName: "tanner",
-    lastName: "linsley",
-    age: 24,
-    visits: 100,
-    status: "In Relationship",
-    progress: 50,
-  },
-  {
-    firstName: "tandy",
-    lastName: "miller",
-    age: 40,
-    visits: 40,
-    status: "Single",
-    progress: 80,
-  },
-  {
-    firstName: "joe",
-    lastName: "dirte",
-    age: 45,
-    visits: 20,
-    status: "Complicated",
-    progress: 10,
-  },
-];
-
-const columnHelper = createColumnHelper<Person>();
-export const COLUMNS = [
-  columnHelper.accessor("firstName", {
-    cell:async (info) =>{
-      try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/users');
-        const data = await response.json();
-        return data.name; 
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-      },
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor((row) => row.lastName, {
-    id: "lastName",
-    cell: (info) => <i>{info.getValue()}</i>,
-    header: () => <span>Last Name</span>,
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("age", {
-    header: () => "Age",
-    cell: (info) => info.renderValue(),
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("visits", {
-    header: () => <span>Visits</span>,
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("status", {
-    header: "Status",
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor("progress", {
-    header: "Profile Progress",
-    footer: (info) => info.column.id,
-  }),
-];
 const Billing = () => {
-  const [data, _setData] = React.useState(() => [...defaultData]);
-  const rerender = React.useReducer(() => ({}), {})[1];
+  const COLUMNS = useMemo(
+    () => [
+      columnHelper.accessor("name", {
+        header: () => "Name",
+        cell: (info) => info.getValue(),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("username", {
+        header: () => "Username",
+        cell: (info) => <i>{info.getValue()}</i>,
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("email", {
+        header: () => "Email",
+        cell: (info) => info.renderValue(),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("phone", {
+        header: () => "Phone",
+        cell: (info) => info.renderValue(),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("website", {
+        header: () => "Website",
+        cell: (info) => info.renderValue(),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("address", {
+        header: () => "Address",
+        cell: (info) => (
+          <span>
+            {info.row.original.address.street},{info.row.original.address.suite}
+            ,{info.row.original.address.city},
+            {info.row.original.address.zipcode}
+          </span>
+        ),
+        footer: (info) => info.column.id,
+      }),
+      columnHelper.accessor("company", {
+        header: () => "Company",
+        cell: (info) => (
+          <span>
+            {info.row.original.company.name},
+            {info.row.original.company.catchPhrase},
+            {info.row.original.company.bs}
+          </span>
+        ),
+        footer: (info) => info.column.id,
+      }),
+    ],
+    []
+  );
+
+  const [data, _setData] = useState<People[]>([]);
+  const rerender = useReducer(() => ({}), {})[1];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const jsonData = await response.json();
+        _setData(jsonData);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const table = useReactTable({
     columns: COLUMNS,
-    data: defaultData,
-
+    data: data,
     getCoreRowModel: getCoreRowModel(),
   });
+  
   return (
     <div className="p-2">
-    <table>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-      <tfoot>
-        {table.getFooterGroups().map((footerGroup) => (
-          <tr key={footerGroup.id}>
-            {footerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.footer,
-                      header.getContext()
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </tfoot>
-    </table>
-    <div className="h-4" />
-    <button onClick={() => rerender()} className="border p-2">
-      Rerender
-    </button>
-  </div>
-);
-
-}
+      <table>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          {table.getFooterGroups().map((footerGroup) => (
+            <tr key={footerGroup.id}>
+              {footerGroup.headers.map((header) => (
+                <th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.footer,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </tfoot>
+      </table>
+      <div className="h-4" />
+      <button onClick={() => rerender()} className="border p-2">
+        Rerender
+      </button>
+    </div>
+  );
+};
 
 export default Billing;
